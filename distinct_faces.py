@@ -3,13 +3,12 @@ import os
 import cv2
 import numpy as np
 import torch
-from facenet_pytorch import MTCNN, InceptionResnetV1, extract_face
+from facenet_pytorch import InceptionResnetV1, extract_face
 from ultralytics import YOLO
 from pathlib import Path
 
 # FaceNet 및 YOLO 모델 로드
 facenet = InceptionResnetV1(pretrained='vggface2').eval()
-mtcnn = MTCNN(keep_all=True)
 yolo = YOLO("yolo/best.pt")  # YOLOv8 'best.pt' 가중치 사용
 
 # 인물 이름에 따른 임베딩 벡터를 저장할 딕셔너리
