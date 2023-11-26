@@ -1,6 +1,7 @@
 import cv2
 import torch
 import os
+import sys
 from pathlib import Path
 from ultralytics import YOLO
 
@@ -18,9 +19,18 @@ for person_folder in unaligned_folder.iterdir():
         aligned_person_folder = aligned_folder / person_folder.name
         aligned_person_folder.mkdir(exist_ok=True)
 
-        for image_path in person_folder.glob("*.png"):
-            image = cv2.imread(str(image_path))
-            results = model(image)
+        for image_path in person_folder.iterdir():
+            if image_path.is_file():
+                # 파일 확장자를 가져옵니다.
+                file_extension = image_path.suffix.lower()
+
+            if file_extension in [".png", ".jpg", ".jpeg", ".gif"]:
+                # 이미지 파일인 경우 처리합니다.
+                image = cv2.imread(str(image_path))
+                results = model(image)
+            else:
+                print("file_extension error")
+                sys.exit()
 
             # 'results[0].names' 사전 반전
             names_inv = {v: k for k, v in results[0].names.items()}
