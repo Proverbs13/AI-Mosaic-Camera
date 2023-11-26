@@ -14,7 +14,10 @@ interpreter = tf.lite.Interpreter(model_path="facenet/facenet.tflite")
 interpreter.allocate_tensors()
 
 # Yolo 모델 로드
-yolo = YOLO("yolo/best.pt")  # YOLOv8 'best.pt' 가중치 사용
+# yolo = YOLO("yolo/best.pt")  # YOLOv8 'best.pt' 가중치 사용
+
+yolo = YOLO("yolo/yolov8n-face.pt") # YOLOv8 pretrained 가중치 사용
+
 
 # 인물 이름에 따른 임베딩 벡터를 저장할 딕셔너리
 embeddings_dict = {}

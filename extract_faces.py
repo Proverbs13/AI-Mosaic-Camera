@@ -6,7 +6,9 @@ from pathlib import Path
 from ultralytics import YOLO
 
 # YOLOv8 모델 로드 ('best.pt' 가중치 사용)
-model = YOLO("yolo/best.pt")
+# model = YOLO("yolo/best.pt")
+# YOLOv8 모델 로드 (pretrained 가중치 사용)
+model = YOLO("yolo/yolov8n-face.pt")
 
 # 폴더 경로 설정
 unaligned_folder = Path("unaligned_faces")
