@@ -9,21 +9,23 @@ from pathlib import Path
 import tensorflow as tf
 
 # FaceNet 모델 로드
-# facenet = InceptionResnetV1(pretrained='vggface2').eval()
-interpreter = tf.lite.Interpreter(model_path="facenet/facenet.tflite")
-interpreter.allocate_tensors()
+facenet = InceptionResnetV1(pretrained='vggface2').eval()
+# interpreter = tf.lite.Interpreter(model_path="facenet/facenet.tflite")
+# interpreter.allocate_tensors()
 
 # Yolo 모델 로드
 # yolo = YOLO("yolo/best.pt")  # YOLOv8 'best.pt' 가중치 사용
 
-yolo = YOLO("yolo/yolov8n-face.pt") # YOLOv8 pretrained 가중치 사용
+# yolo = YOLO("yolo/yolov8n-face.pt") # YOLOv8 pretrained 가중치 사용
+
+yolo = YOLO("yolo/knife_face_cigarette-detection_3000_11301007_best.pt")
 
 
 # 인물 이름에 따른 임베딩 벡터를 저장할 딕셔너리
 embeddings_dict = {}
 
 # L2 Norm을 계산하는 함수
-def L2Norm(x1, x2):
+def L2Norm(x1, x2): # L2Norm: 벡터간 유클리드 거리 계산
     return np.sqrt(np.sum((x1 - x2) ** 2))
 
 def get_embedding(interpreter, image):

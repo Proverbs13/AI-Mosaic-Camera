@@ -8,7 +8,9 @@ from ultralytics import YOLO
 # YOLOv8 모델 로드 ('best.pt' 가중치 사용)
 # model = YOLO("yolo/best.pt")
 # YOLOv8 모델 로드 (pretrained 가중치 사용)
-model = YOLO("yolo/yolov8n-face.pt")
+# model = YOLO("yolo/yolov8n-face.pt")
+# YOLOv8 모델 로드 (11/30 3000 학습 가중치 사용)
+model = YOLO("yolo/knife_face_cigarette-detection_3000_11301007_best.pt")
 
 # 폴더 경로 설정
 unaligned_folder = Path("unaligned_faces")
