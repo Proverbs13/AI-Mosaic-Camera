@@ -9,9 +9,9 @@ from pathlib import Path
 import tensorflow as tf
 
 # FaceNet 모델 로드
-facenet = InceptionResnetV1(pretrained='vggface2').eval()
-# interpreter = tf.lite.Interpreter(model_path="facenet/facenet.tflite")
-# interpreter.allocate_tensors()
+# facenet = InceptionResnetV1(pretrained='vggface2').eval()
+interpreter = tf.lite.Interpreter(model_path="facenet/facenet.tflite")
+interpreter.allocate_tensors()
 
 # Yolo 모델 로드
 # yolo = YOLO("yolo/best.pt")  # YOLOv8 'best.pt' 가중치 사용
