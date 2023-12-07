@@ -11,7 +11,7 @@ from pathlib import Path
 facenet = InceptionResnetV1(pretrained='vggface2').eval()
 
 # Yolo 모델 로드
-yolo = YOLO("yolo/최종에폭60_8000장.pt")
+yolo = YOLO("yolo/real_final_best.pt")
 
 # 인물 이름에 따른 임베딩 벡터를 저장할 딕셔너리
 embeddings_dict = {}

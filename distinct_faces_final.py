@@ -11,14 +11,21 @@ from pathlib import Path
 facenet = InceptionResnetV1(pretrained='vggface2').eval()
 
 # Yolo 모델 로드
-yolo = YOLO("yolo/final_best.pt")
+yolo = YOLO("yolo/real_final_best.pt")
 
 # 인물 이름에 따른 임베딩 벡터를 저장할 딕셔너리
 embeddings_dict = {}
 
+# method = 'L2Norm'
+method = 'cosine'
+
 # L2 Norm을 계산하는 함수
 def L2Norm(x1, x2):
     return np.sqrt(np.sum((x1 - x2) ** 2))
+
+# 코사인 유사도를 계산하는 함수
+def cosine_similarity(x1, x2):
+    return np.dot(x1, x2) / (np.linalg.norm(x1) * np.linalg.norm(x2))
 
 # 얼굴 임베딩을 계산하는 함수
 def get_embedding(face_img):
@@ -94,22 +101,41 @@ while True:
                 for name, embs in embeddings_dict.items():
                     embeddings_list = []
                     for emb in embs:
-                        dist = L2Norm(emb, crop_img_embedding)
+                        if method == 'L2Norm':
+                            dist = L2Norm(emb, crop_img_embedding)
+                        elif method == 'cosine':
+                            dist = cosine_similarity(emb, crop_img_embedding)
                         embeddings_list.append(dist)
                     avg_embeddings_dict[name] = np.mean(embeddings_list)
 
-                min_dist = float('inf')
-                min_name = None
-                for name, dist in avg_embeddings_dict.items():
-                    if dist < min_dist:
-                        min_dist = dist
-                        min_name = name
 
-                if min_dist < 0.7:
-                    label = f"{min_name}, dist: {min_dist:.2f}"
-                else:
-                    label = f"unknown, dist: {min_dist:.2f}"
-                    frame = apply_blur(frame, (x1, y1), (x2, y2))
+                if method == 'L2Norm':
+                    min_dist = float('inf')
+                    min_name = None
+                    for name, dist in avg_embeddings_dict.items():
+                        if dist < min_dist:
+                            min_dist = dist
+                            min_name = name
+                elif method == 'cosine':
+                    max_similarity = -1
+                    max_name = None
+                    for name, dist in avg_embeddings_dict.items():
+                        if dist > max_similarity:
+                            max_similarity = dist
+                            max_name = name
+
+                if method == 'L2Norm':
+                    if min_dist < 0.7:
+                        label = f"{min_name}, dist: {min_dist:.2f}"
+                    else:
+                        label = f"unknown, dist: {min_dist:.2f}"
+                        frame = apply_blur(frame, (x1, y1), (x2, y2))
+                elif method == 'cosine':
+                    if max_similarity > 0.7:  # 유사도 임계값 설정
+                        label = f"{max_name}, similarity: {max_similarity:.2f}"
+                    else:
+                        label = f"unknown, similarity: {max_similarity:.2f}"
+                        frame = apply_blur(frame, (x1, y1), (x2, y2))
             else:  # 'knife'나 'cigarette' 클래스의 경우
                 frame = apply_blur(frame, (x1, y1), (x2, y2))
                 label = class_name
