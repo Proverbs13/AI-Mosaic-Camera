@@ -16,8 +16,8 @@ yolo = YOLO("yolo/real_final_best.pt")
 # 인물 이름에 따른 임베딩 벡터를 저장할 딕셔너리
 embeddings_dict = {}
 
-# method = 'L2Norm'
-method = 'cosine'
+method = 'L2Norm'
+# method = 'cosine'
 
 # L2 Norm을 계산하는 함수
 def L2Norm(x1, x2):
